@@ -3,3 +3,4 @@
 *.o
 *.d
 a.out
+gmon.out

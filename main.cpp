@@ -1,14 +1,19 @@
+#include <bits/stdc++.h>
+
 #include "board.hpp"
 #include "common.hpp"
 #include "position.hpp"
+#include "solver.hpp"
+
+using namespace std;
 
 
 
 
 
-int test() {
+void test1() {
     const string input(1+R"(
-3 5
+5 3
 #.<.....
 .>...#0.
 .#.^.0##
@@ -120,14 +125,63 @@ int test() {
 
 
 
+}
+
+void test2() {
+    const string input(1+R"(
+0 1
+########
+.>######
+######v#
+0#0#####
+#0######
+#^######
+#####<##
+########
+)");
+
+    Position pos = pos_read(input);
+    ASSERT(pos_str(pos) == input);
+    ASSERT(pos.player == (1ULL<<yx2idx(1,0)));
+    cerr << board_str(pos.wall|pos.up|pos.down|pos.left|pos.right) << "\n";
+    cerr << board_str(board_neighbor(pos.player)) << "\n";
+    cerr << board_str(pos_area(pos)) << "\n";
+    ASSERT(board_str(pos_area(pos)) == 1+R"(
+10000000
+01000000
+10000000
+00000000
+00000000
+00000000
+00000000
+00000000
+)");
+}
+
+int test() {
+    test1();
+    test2();
+
     return 0;
 }
 
 int main(int argc, char** argv) {
+    cin.tie(nullptr);
+    ios::sync_with_stdio(false);
+    cout << fixed;
+    cerr << fixed;
+
     if(argc == 2 && strcmp(argv[1],"-test") == 0)
         return test();
 
-    
+    string input = read_all(cin);
+    Position pos = pos_read(input);
+
+    solve(pos);
+
+    for(const auto& sol : solution_all) {
+        cout << sol_str(sol) << "\n";
+    }
 
     return 0;
 }

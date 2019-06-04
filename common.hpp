@@ -2,8 +2,6 @@
 
 #include <bits/stdc++.h>
 
-#include <x86intrin.h>
-
 using namespace std;
 
 #define CPP_STR(x) CPP_STR_I(x)
@@ -16,13 +14,43 @@ using namespace std;
 using u8  = uint8_t;
 using u64 = uint64_t;
 
+using f64 = double;
+
 #define FOR(i, start, end) for(int i = (start), CPP_CAT(i,xxxx_end)=(end); i < CPP_CAT(i,xxxx_end); ++i)
 #define REP(i, n) FOR(i, 0, n)
+
+template<typename T>
+void DBG_IMPL(int line, const char* expr, const T& value) {
+    cerr << "[L " << line << "]: ";
+    cerr << expr << " = \n";
+    cerr << value << "\n";
+    cerr << "\n";
+}
+#define NO_DBG
+#ifdef NO_DBG
+    #define DBG(expr)
+#else
+    #define DBG(expr) DBG_IMPL(__LINE__, CPP_STR(expr), (expr))
+#endif
 
 inline string read_all(istream& in) {
     ostringstream out;
     out << in.rdbuf();
     return out.str();
+}
+
+inline u64 get_ticks_ms() {
+    static const auto START = chrono::high_resolution_clock::now();
+    auto now = chrono::high_resolution_clock::now();
+    return chrono::duration_cast<chrono::milliseconds>(now-START).count();
+}
+
+template<typename F>
+inline u64 bench(F&& f) {
+    u64 t1 = get_ticks_ms();
+    f();
+    u64 t2 = get_ticks_ms();
+    return t2 - t1;
 }
 
 inline pair<int,int> idx2yx(int i) {
