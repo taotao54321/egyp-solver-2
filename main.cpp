@@ -25,16 +25,8 @@ void test1() {
 )");
 
     Position pos = pos_read(input);
-    ASSERT(pos_str(pos) == 1+R"(
-#.<.....
-.>...#0.
-.#.^.0##
-1#.#.#.1
-..v.#...
-...2#.v.
-...#....
-...2#.<<
-)");
+    ASSERT(pos_str(pos) == input);
+    ASSERT(pos.player == (1ULL<<yx2idx(3,5)));
     ASSERT(board_str(pos.wall) == 1+R"(
 10000000
 00000100
@@ -117,7 +109,7 @@ void test1() {
 )");
     ASSERT(all_of(begin(pos.piece)+3, end(pos.piece), [](u64 e) { return e == 0; }));
 
-    ASSERT(board_str(pos.area) == 1+R"(
+    ASSERT(board_str(pos_area(pos)) == 1+R"(
 00111111
 01111111
 01111111
@@ -149,17 +141,12 @@ void test2() {
 )");
 
     Position pos = pos_read(input);
-    ASSERT(pos_str(pos) == 1+R"(
-########
-.>######
-######v#
-0#0#####
-#0######
-#^######
-#####<##
-########
-)");
-    ASSERT(board_str(pos.area) == 1+R"(
+    ASSERT(pos_str(pos) == input);
+    ASSERT(pos.player == (1ULL<<yx2idx(1,0)));
+    cerr << board_str(pos.wall|pos.up|pos.down|pos.left|pos.right) << "\n";
+    cerr << board_str(board_neighbor(pos.player)) << "\n";
+    cerr << board_str(pos_area(pos)) << "\n";
+    ASSERT(board_str(pos_area(pos)) == 1+R"(
 10000000
 01000000
 10000000
