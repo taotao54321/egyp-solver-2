@@ -55,14 +55,12 @@ public:
 private:
     void dfs(const Position& pos, int depth) {
         ++node_count_;
-        auto pr = pos.result();
-        if(pr == Board::SOLVED) {
+        int lts = pos.least_to_solve();
+        if(lts == 0) {
             solution_all_.emplace_back(solution_);
             return;
         }
-        if(depth+pos.least_to_solve() > depth_max_) return;  // IDA*
-        //if(depth+1 > depth_max_) return;  // IDDFS
-        if(pr == Board::STUCK) return;
+        if(depth+lts > depth_max_) return;
 
         u64 ar,up,down,left,right; tie(ar,up,down,left,right) = pos.moves();
 

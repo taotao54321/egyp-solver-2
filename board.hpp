@@ -146,39 +146,34 @@ public:
     }
 
     // 解くまでに最低限必要な手数を求める
-    // 解は存在する(STUCK チェック済み)と仮定する
+    // 既に解かれている局面に対しては 0 を返す
+    // 解がない(STUCK)局面に対しては 255 を返す
     // 盤面は正しいと仮定する(消えるはずのピースが消えていないとかはナシ)
     // ピース間の距離で判断(15パズルのマンハッタン距離枝刈りみたいな感じ)
-    // TODO: SOLVED, STUCK 判定もまとめて行うようにしては?
     int least_to_solve() const {
         int res = 0;
 
-        // TODO: bsf連打で駒のインデックスを列挙する方が速いかも
         FOR(pc, TL_PC_FIRST, TL_PC_LAST) {
-#if 0
             u64 bb = bbs_[pc];
+            if(bb == 0) continue;
+
             int indices[31];
             int cnt = 0;
             while(bb != 0) {
                 int i = bitboard_bsf(bb);
-                
                 bb &= (bb-1);
+                indices[cnt++] = i;
             }
-#endif
-#if 1
-            const auto& bb = bbs_[pc];
-            if(bb == 0) continue;
+            if(cnt == 1) return 255;
+
             int cur = 255;
-            REP(i, 64) {
-                if((bb&(1ULL<<i)) == 0) continue;
-                FOR(j, i+1, 64) {
-                    if((bb&(1ULL<<j)) == 0) continue;
-                    chmin(cur, LEAST_TO_SOLVE[i][j]);
-                    if(cur == 1) goto finish_pc;
-                }
+            REP(i, cnt) FOR(j, i+1, cnt) {
+                int a = indices[i];
+                int b = indices[j];
+                chmin(cur, LEAST_TO_SOLVE[a][b]);
+                if(cur == 1) goto finish_pc;
             }
 finish_pc:
-#endif
             chmax(res, cur);
         }
 
