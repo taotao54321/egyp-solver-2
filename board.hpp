@@ -85,12 +85,13 @@ public:
     u64 get(Tile tile) const { return bbs_[tile]; }
 
     Result result() const {
+        bool solved = true;
         FOR(i, TL_PC_FIRST, TL_PC_LAST) {
             int k = __builtin_popcountll(bbs_[i]);
             if(k == 1) return STUCK;
-            if(k >= 2) return UNKNOWN;
+            if(k >= 2) solved = false;
         }
-        return SOLVED;
+        return solved ? SOLVED : UNKNOWN;
     }
 
     // (area,up,down,left,right)
