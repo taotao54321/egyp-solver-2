@@ -10,13 +10,14 @@ public:
     Position(u64 player, const Board& board) : player_(player), board_(board) {}
 
     u64 player() const { return player_; }
-    u64 board(Tile tile) const { return board_.get(tile); }
+    const Board& board() const { return board_; }
 
     Board::Result result() const {
         return board_.result();
     }
 
-    tuple<u64,u64,u64,u64> moves() const {
+    // (area,up,down,left,right)
+    tuple<u64,u64,u64,u64,u64> moves() const {
         return board_.moves(player_);
     }
 

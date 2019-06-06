@@ -76,9 +76,11 @@ class Board {
 public:
     enum Result { SOLVED, STUCK, UNKNOWN };
 
-    explicit Board(u64 (&bbs)[TL_COUNT]) {
+    explicit Board(const u64 (&bbs)[TL_COUNT]) {
         memcpy(bbs_, bbs, 8*TL_COUNT);
     }
+
+    const u64 (&bbs() const)[TL_COUNT] { return bbs_; }
 
     u64 get(Tile tile) const { return bbs_[tile]; }
 
@@ -91,9 +93,11 @@ public:
         return SOLVED;
     }
 
-    tuple<u64,u64,u64,u64> moves(u64 point) const {
+    // (area,up,down,left,right)
+    tuple<u64,u64,u64,u64,u64> moves(u64 point) const {
         u64 ar = area(point);
         return {
+            ar,
             bbs_[TL_U] & ar,
             bbs_[TL_D] & ar,
             bbs_[TL_L] & ar,

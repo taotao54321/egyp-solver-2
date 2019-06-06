@@ -27,7 +27,7 @@ void test1() {
     auto pos = from_str<Position>(input);
     ASSERT(to_str(pos) == input);
     ASSERT(pos.player() == (1ULL<<yx2idx(3,5)));
-    ASSERT(bitboard_str(pos.board(TL_U)) == 1+R"(
+    ASSERT(bitboard_str(pos.board().get(TL_U)) == 1+R"(
 00000000
 00000000
 00010000
@@ -37,7 +37,7 @@ void test1() {
 00000000
 00000000
 )");
-    ASSERT(bitboard_str(pos.board(TL_D)) == 1+R"(
+    ASSERT(bitboard_str(pos.board().get(TL_D)) == 1+R"(
 00000000
 00000000
 00000000
@@ -47,7 +47,7 @@ void test1() {
 00000000
 01000000
 )");
-    ASSERT(bitboard_str(pos.board(TL_L)) == 1+R"(
+    ASSERT(bitboard_str(pos.board().get(TL_L)) == 1+R"(
 00100000
 00000000
 00000000
@@ -57,7 +57,7 @@ void test1() {
 10000000
 00000011
 )");
-    ASSERT(bitboard_str(pos.board(TL_R)) == 1+R"(
+    ASSERT(bitboard_str(pos.board().get(TL_R)) == 1+R"(
 00000000
 01000000
 00000000
@@ -67,7 +67,7 @@ void test1() {
 00100000
 00000000
 )");
-    ASSERT(bitboard_str(pos.board(TL_WALL)) == 1+R"(
+    ASSERT(bitboard_str(pos.board().get(TL_WALL)) == 1+R"(
 10000000
 00000100
 01000011
@@ -77,7 +77,7 @@ void test1() {
 00010000
 00001000
 )");
-    ASSERT(bitboard_str(pos.board(TL_PC0)) == 1+R"(
+    ASSERT(bitboard_str(pos.board().get(TL_PC0)) == 1+R"(
 00000000
 00000010
 00000100
@@ -87,7 +87,7 @@ void test1() {
 00000000
 00000000
 )");
-    ASSERT(bitboard_str(pos.board(TL_PC1)) == 1+R"(
+    ASSERT(bitboard_str(pos.board().get(TL_PC1)) == 1+R"(
 00000000
 00000000
 00000000
@@ -97,7 +97,7 @@ void test1() {
 00000000
 00000000
 )");
-    ASSERT(bitboard_str(pos.board(TL_PC2)) == 1+R"(
+    ASSERT(bitboard_str(pos.board().get(TL_PC2)) == 1+R"(
 00000000
 00000000
 00000000
@@ -107,10 +107,20 @@ void test1() {
 00000000
 00010000
 )");
-    ASSERT(pos.board(TL_PC3) == 0);
+    ASSERT(pos.board().get(TL_PC3) == 0);
 
     {
-        u64 u,d,l,r; tie(u,d,l,r) = pos.moves();
+        u64 ar,u,d,l,r; tie(ar,u,d,l,r) = pos.moves();
+        ASSERT(bitboard_str(ar) == 1+R"(
+00111111
+01111111
+01111111
+01111111
+00101111
+00001111
+00011111
+00001111
+)");
         ASSERT(bitboard_str(u) == 1+R"(
 00000000
 00000000
@@ -178,7 +188,17 @@ void test2() {
     ASSERT(pos.player() == (1ULL<<yx2idx(1,0)));
 
     {
-        u64 u,d,l,r; tie(u,d,l,r) = pos.moves();
+        u64 ar,u,d,l,r; tie(ar,u,d,l,r) = pos.moves();
+        ASSERT(bitboard_str(ar) == 1+R"(
+10000000
+01000000
+10000000
+00000000
+00000000
+00000000
+00000000
+00000000
+)");
         ASSERT(bitboard_str(u) == 1+R"(
 00000000
 00000000
