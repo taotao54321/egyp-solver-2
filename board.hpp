@@ -163,8 +163,10 @@ public:
                 FOR(j, i+1, 64) {
                     if((bb&(1ULL<<j)) == 0) continue;
                     chmin(cur, LEAST_TO_SOLVE[i][j]);
+                    if(cur == 1) goto finish_pc;
                 }
             }
+finish_pc:
             chmax(res, cur);
         }
 
