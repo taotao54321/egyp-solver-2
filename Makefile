@@ -27,7 +27,8 @@ ifdef NO_OPTIMIZE
     CXXFLAGS += -g -fsanitize=undefined -fno-sanitize-recover=all -D_GLIBCXX_DEBUG
 else
     CXXFLAGS += -O2 -march=native -mtune=native
-    #CXXFLAGS += -pg -O2 -march=native -mtune=native
+    #CXXFLAGS += -O3 -march=native -mtune=native
+    #CXXFLAGS += -pg
 endif
 
 SRCS := $(wildcard *.cpp)

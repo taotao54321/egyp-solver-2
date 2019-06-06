@@ -232,8 +232,8 @@ int test() {
 int main(int argc, char** argv) {
     cin.tie(nullptr);
     ios::sync_with_stdio(false);
-    cout << fixed;
-    cerr << fixed;
+    cout << fixed << setprecision(2);
+    cerr << fixed << setprecision(2);
 
     if(argc == 2 && strcmp(argv[1],"-test") == 0)
         return test();
