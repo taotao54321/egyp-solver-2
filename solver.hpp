@@ -74,6 +74,8 @@ private:
 
         while(up != 0) {
             u64 point = up & (-up);
+            up &= up-1;
+            //up &= ~point;
             solution_.emplace_back(point);
 
             Position pos2(pos);
@@ -81,12 +83,12 @@ private:
             dfs(pos2, depth+1);
 
             solution_.pop_back();
-            up &= up-1;
-            //up &= ~point;
         }
 
         while(down != 0) {
             u64 point = down & (-down);
+            down &= down-1;
+            //down &= ~point;
             solution_.emplace_back(point);
 
             Position pos2(pos);
@@ -94,12 +96,12 @@ private:
             dfs(pos2, depth+1);
 
             solution_.pop_back();
-            down &= down-1;
-            //down &= ~point;
         }
 
         while(left != 0) {
             u64 point = left & (-left);
+            left &= left-1;
+            //left &= ~point;
             solution_.emplace_back(point);
 
             Position pos2(pos);
@@ -107,12 +109,12 @@ private:
             dfs(pos2, depth+1);
 
             solution_.pop_back();
-            left &= left-1;
-            //left &= ~point;
         }
 
         while(right != 0) {
             u64 point = right & (-right);
+            right &= right-1;
+            //right &= ~point;
             solution_.emplace_back(point);
 
             Position pos2(pos);
@@ -120,8 +122,6 @@ private:
             dfs(pos2, depth+1);
 
             solution_.pop_back();
-            right &= right-1;
-            //right &= ~point;
         }
     }
 
