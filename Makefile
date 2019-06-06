@@ -2,7 +2,7 @@
 
 CXX := g++
 CXXFLAGS := \
-    -std=c++14 \
+    -std=c++17 \
     -Wall -Wextra \
     -Wconditionally-supported \
     -Wconversion \
@@ -27,6 +27,7 @@ ifdef NO_OPTIMIZE
     CXXFLAGS += -g -fsanitize=undefined -fno-sanitize-recover=all -D_GLIBCXX_DEBUG
 else
     CXXFLAGS += -O2 -march=native -mtune=native
+    #CXXFLAGS += -pg -O2 -march=native -mtune=native
 endif
 
 SRCS := $(wildcard *.cpp)

@@ -19,15 +19,55 @@ void test1() {
 .#.^.0##
 1#.#.#.1
 ..v.#...
-...2#.v.
-...#....
-...2#.<<
+.^.2#.v.
+<.>#....
+.v.2#.<<
 )");
 
-    Position pos = pos_read(input);
-    ASSERT(pos_str(pos) == input);
-    ASSERT(pos.player == (1ULL<<yx2idx(3,5)));
-    ASSERT(board_str(pos.wall) == 1+R"(
+    auto pos = from_str<Position>(input);
+    ASSERT(to_str(pos) == input);
+    ASSERT(pos.player() == (1ULL<<yx2idx(3,5)));
+    ASSERT(bitboard_str(pos.board(TL_U)) == 1+R"(
+00000000
+00000000
+00010000
+00000000
+00000000
+01000000
+00000000
+00000000
+)");
+    ASSERT(bitboard_str(pos.board(TL_D)) == 1+R"(
+00000000
+00000000
+00000000
+00000000
+00100000
+00000010
+00000000
+01000000
+)");
+    ASSERT(bitboard_str(pos.board(TL_L)) == 1+R"(
+00100000
+00000000
+00000000
+00000000
+00000000
+00000000
+10000000
+00000011
+)");
+    ASSERT(bitboard_str(pos.board(TL_R)) == 1+R"(
+00000000
+01000000
+00000000
+00000000
+00000000
+00000000
+00100000
+00000000
+)");
+    ASSERT(bitboard_str(pos.board(TL_WALL)) == 1+R"(
 10000000
 00000100
 01000011
@@ -37,47 +77,7 @@ void test1() {
 00010000
 00001000
 )");
-    ASSERT(board_str(pos.up) == 1+R"(
-00000000
-00000000
-00010000
-00000000
-00000000
-00000000
-00000000
-00000000
-)");
-    ASSERT(board_str(pos.down) == 1+R"(
-00000000
-00000000
-00000000
-00000000
-00100000
-00000010
-00000000
-00000000
-)");
-    ASSERT(board_str(pos.left) == 1+R"(
-00100000
-00000000
-00000000
-00000000
-00000000
-00000000
-00000000
-00000011
-)");
-    ASSERT(board_str(pos.right) == 1+R"(
-00000000
-01000000
-00000000
-00000000
-00000000
-00000000
-00000000
-00000000
-)");
-    ASSERT(board_str(pos.piece[0]) == 1+R"(
+    ASSERT(bitboard_str(pos.board(TL_PC0)) == 1+R"(
 00000000
 00000010
 00000100
@@ -87,7 +87,7 @@ void test1() {
 00000000
 00000000
 )");
-    ASSERT(board_str(pos.piece[1]) == 1+R"(
+    ASSERT(bitboard_str(pos.board(TL_PC1)) == 1+R"(
 00000000
 00000000
 00000000
@@ -97,7 +97,7 @@ void test1() {
 00000000
 00000000
 )");
-    ASSERT(board_str(pos.piece[2]) == 1+R"(
+    ASSERT(bitboard_str(pos.board(TL_PC2)) == 1+R"(
 00000000
 00000000
 00000000
@@ -107,18 +107,51 @@ void test1() {
 00000000
 00010000
 )");
-    ASSERT(all_of(begin(pos.piece)+3, end(pos.piece), [](u64 e) { return e == 0; }));
+    ASSERT(pos.board(TL_PC3) == 0);
 
-    ASSERT(board_str(pos_area(pos)) == 1+R"(
-00111111
-01111111
-01111111
-01111111
-00101111
-00001111
-00011111
-00001111
+    {
+        u64 u,d,l,r; tie(u,d,l,r) = pos.moves();
+        ASSERT(bitboard_str(u) == 1+R"(
+00000000
+00000000
+00010000
+00000000
+00000000
+00000000
+00000000
+00000000
 )");
+        ASSERT(bitboard_str(d) == 1+R"(
+00000000
+00000000
+00000000
+00000000
+00100000
+00000010
+00000000
+00000000
+)");
+        ASSERT(bitboard_str(l) == 1+R"(
+00100000
+00000000
+00000000
+00000000
+00000000
+00000000
+00000000
+00000011
+)");
+        ASSERT(bitboard_str(r) == 1+R"(
+00000000
+01000000
+00000000
+00000000
+00000000
+00000000
+00000000
+00000000
+)");
+    }
 
 
 
@@ -140,22 +173,53 @@ void test2() {
 ########
 )");
 
-    Position pos = pos_read(input);
-    ASSERT(pos_str(pos) == input);
-    ASSERT(pos.player == (1ULL<<yx2idx(1,0)));
-    cerr << board_str(pos.wall|pos.up|pos.down|pos.left|pos.right) << "\n";
-    cerr << board_str(board_neighbor(pos.player)) << "\n";
-    cerr << board_str(pos_area(pos)) << "\n";
-    ASSERT(board_str(pos_area(pos)) == 1+R"(
-10000000
-01000000
-10000000
+    auto pos = from_str<Position>(input);
+    ASSERT(to_str(pos) == input);
+    ASSERT(pos.player() == (1ULL<<yx2idx(1,0)));
+
+    {
+        u64 u,d,l,r; tie(u,d,l,r) = pos.moves();
+        ASSERT(bitboard_str(u) == 1+R"(
+00000000
+00000000
+00000000
 00000000
 00000000
 00000000
 00000000
 00000000
 )");
+        ASSERT(bitboard_str(d) == 1+R"(
+00000000
+00000000
+00000000
+00000000
+00000000
+00000000
+00000000
+00000000
+)");
+        ASSERT(bitboard_str(l) == 1+R"(
+00000000
+00000000
+00000000
+00000000
+00000000
+00000000
+00000000
+00000000
+)");
+        ASSERT(bitboard_str(r) == 1+R"(
+00000000
+01000000
+00000000
+00000000
+00000000
+00000000
+00000000
+00000000
+)");
+    }
 }
 
 int test() {
@@ -174,12 +238,12 @@ int main(int argc, char** argv) {
     if(argc == 2 && strcmp(argv[1],"-test") == 0)
         return test();
 
-    string input = read_all(cin);
-    Position pos = pos_read(input);
+    auto pos = Position::read_from(cin);
 
-    solve(pos);
+    Solver solver;
+    auto sols = solver.solve(pos);
 
-    for(const auto& sol : solution_all) {
+    for(const auto& sol : sols) {
         cout << sol_str(sol) << "\n";
     }
 

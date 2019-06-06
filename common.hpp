@@ -46,6 +46,19 @@ inline string read_all(istream& in) {
     return out.str();
 }
 
+template<typename T>
+string to_str(const T& x) {
+    ostringstream out;
+    x.write_to(out);
+    return out.str();
+}
+
+template<typename T>
+T from_str(const string& input) {
+    istringstream in(input);
+    return T::read_from(in);
+}
+
 inline u64 get_ticks_ms() {
     static const auto START = chrono::high_resolution_clock::now();
     auto now = chrono::high_resolution_clock::now();
