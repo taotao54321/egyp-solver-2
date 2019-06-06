@@ -43,7 +43,7 @@ public:
 
     // 探索を打ち切ってよければ true を返す
     // そうでない場合、適当にテーブルを更新して false を返す
-    bool check(u8 depth, u64 area, const u64 (&bbs)[TL_COUNT]) {
+    bool check(int depth, u64 area, const u64 (&bbs)[TL_COUNT]) {
         u64 idx = hash_position(area, bbs) & (BUCKET_COUNT-1);
         auto& entry = bucket_[idx];
 
