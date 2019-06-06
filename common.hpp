@@ -40,6 +40,24 @@ void DBG_IMPL(int line, const char* expr, const T& value) {
     #define DBG(expr) DBG_IMPL(__LINE__, CPP_STR(expr), (expr))
 #endif
 
+template<typename T, typename U, typename Comp=less<>>
+inline bool chmax(T& xmax, const U& x, Comp comp={}) {
+    if(comp(xmax, x)) {
+        xmax = x;
+        return true;
+    }
+    return false;
+}
+
+template<typename T, typename U, typename Comp=less<>>
+inline bool chmin(T& xmin, const U& x, Comp comp={}) {
+    if(comp(x, xmin)) {
+        xmin = x;
+        return true;
+    }
+    return false;
+}
+
 inline string read_all(istream& in) {
     ostringstream out;
     out << in.rdbuf();

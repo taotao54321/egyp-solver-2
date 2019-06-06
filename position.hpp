@@ -45,6 +45,10 @@ public:
         board_.rotate_right(y);
     }
 
+    int least_to_solve() const {
+        return board_.least_to_solve();
+    }
+
     void write_to(ostream& out) const {
         int player_i = bitboard_bsf(player_);
         int player_y,player_x; tie(player_y,player_x) = idx2yx(player_i);

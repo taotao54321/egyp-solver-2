@@ -60,16 +60,17 @@ private:
             solution_all_.emplace_back(solution_);
             return;
         }
-        if(depth+1 > depth_max_) return;
+        if(depth+pos.least_to_solve() > depth_max_) return;  // IDA*
+        //if(depth+1 > depth_max_) return;  // IDDFS
         if(pr == Board::STUCK) return;
 
         u64 ar,up,down,left,right; tie(ar,up,down,left,right) = pos.moves();
 
-        bool tt_hit = tt_.check(depth, ar, pos.board().bbs());
-        if(tt_hit) {
-            ++tt_hit_count_;
-            return;
-        }
+        //bool tt_hit = tt_.check(depth, ar, pos.board().bbs());
+        //if(tt_hit) {
+        //    ++tt_hit_count_;
+        //    return;
+        //}
 
         while(up != 0) {
             u64 point = up & (-up);
