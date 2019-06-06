@@ -64,11 +64,11 @@ private:
 
         u64 ar,up,down,left,right; tie(ar,up,down,left,right) = pos.moves();
 
-        //bool tt_hit = tt_.check(depth, ar, pos.board().bbs());
-        //if(tt_hit) {
-        //    ++tt_hit_count_;
-        //    return;
-        //}
+        bool tt_hit = tt_.check(depth, ar, pos.board().bbs());
+        if(tt_hit) {
+            ++tt_hit_count_;
+            return;
+        }
 
         while(up != 0) {
             u64 point = up & (-up);
