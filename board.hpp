@@ -155,6 +155,17 @@ public:
 
         // TODO: bsf連打で駒のインデックスを列挙する方が速いかも
         FOR(pc, TL_PC_FIRST, TL_PC_LAST) {
+#if 0
+            u64 bb = bbs_[pc];
+            int indices[31];
+            int cnt = 0;
+            while(bb != 0) {
+                int i = bitboard_bsf(bb);
+                
+                bb &= (bb-1);
+            }
+#endif
+#if 1
             const auto& bb = bbs_[pc];
             if(bb == 0) continue;
             int cur = 255;
@@ -167,6 +178,7 @@ public:
                 }
             }
 finish_pc:
+#endif
             chmax(res, cur);
         }
 

@@ -26,8 +26,10 @@ LDFLAGS :=
 ifdef NO_OPTIMIZE
     CXXFLAGS += -g -fsanitize=undefined -fno-sanitize-recover=all -D_GLIBCXX_DEBUG
 else
-    CXXFLAGS += -O2 -march=native -mtune=native
-    #CXXFLAGS += -O3 -march=native -mtune=native
+    ARCH := native
+    #ARCH := haswell
+    CXXFLAGS += -O2 -march=$(ARCH) -mtune=$(ARCH)
+    #CXXFLAGS += -O3 -march=$(ARCH) -mtune=$(ARCH)
     #CXXFLAGS += -pg
 endif
 

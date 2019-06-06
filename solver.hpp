@@ -81,7 +81,8 @@ private:
             dfs(pos2, depth+1);
 
             solution_.pop_back();
-            up &= ~point;
+            up &= up-1;
+            //up &= ~point;
         }
 
         while(down != 0) {
@@ -93,7 +94,8 @@ private:
             dfs(pos2, depth+1);
 
             solution_.pop_back();
-            down &= ~point;
+            down &= down-1;
+            //down &= ~point;
         }
 
         while(left != 0) {
@@ -105,7 +107,8 @@ private:
             dfs(pos2, depth+1);
 
             solution_.pop_back();
-            left &= ~point;
+            left &= left-1;
+            //left &= ~point;
         }
 
         while(right != 0) {
@@ -117,7 +120,8 @@ private:
             dfs(pos2, depth+1);
 
             solution_.pop_back();
-            right &= ~point;
+            right &= right-1;
+            //right &= ~point;
         }
     }
 
