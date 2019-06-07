@@ -28,8 +28,8 @@ ifdef NO_OPTIMIZE
 else
     ARCH := native
     #ARCH := haswell
-    CXXFLAGS += -O2 -march=$(ARCH) -mtune=$(ARCH)
-    #CXXFLAGS += -O3 -march=$(ARCH) -mtune=$(ARCH)
+    #CXXFLAGS += -O2 -march=$(ARCH) -mtune=$(ARCH)
+    CXXFLAGS += -O3 -march=$(ARCH) -mtune=$(ARCH)
     #CXXFLAGS += -pg
 endif
 
