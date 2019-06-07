@@ -7,45 +7,45 @@
 
 class Position {
 public:
-    Position(u64 player, const Board& board) : player_(player), board_(board) {}
+    Position(u64 player, const Board& board) noexcept : player_(player), board_(board) {}
 
-    u64 player() const { return player_; }
-    const Board& board() const { return board_; }
+    u64 player() const noexcept { return player_; }
+    const Board& board() const noexcept { return board_; }
 
-    Board::Result result() const {
+    Board::Result result() const noexcept {
         return board_.result();
     }
 
     // (area,up,down,left,right)
-    tuple<u64,u64,u64,u64,u64> moves() const {
+    tuple<u64,u64,u64,u64,u64> moves() const noexcept {
         return board_.moves(player_);
     }
 
-    void move_up(u64 point) {
+    void move_up(u64 point) noexcept {
         player_ = point;
         int x = bitboard_bsf(point) % 8;
         board_.rotate_up(x);
     }
 
-    void move_down(u64 point) {
+    void move_down(u64 point) noexcept {
         player_ = point;
         int x = bitboard_bsf(point) % 8;
         board_.rotate_down(x);
     }
 
-    void move_left(u64 point) {
+    void move_left(u64 point) noexcept {
         player_ = point;
         int y = bitboard_bsf(point) / 8;
         board_.rotate_left(y);
     }
 
-    void move_right(u64 point) {
+    void move_right(u64 point) noexcept {
         player_ = point;
         int y = bitboard_bsf(point) / 8;
         board_.rotate_right(y);
     }
 
-    int least_to_solve() const {
+    int least_to_solve() const noexcept {
         return board_.least_to_solve();
     }
 

@@ -41,7 +41,7 @@ void DBG_IMPL(int line, const char* expr, const T& value) {
 #endif
 
 template<typename T, typename U, typename Comp=less<>>
-inline bool chmax(T& xmax, const U& x, Comp comp={}) {
+inline bool chmax(T& xmax, const U& x, Comp comp={}) noexcept {
     if(comp(xmax, x)) {
         xmax = x;
         return true;
@@ -50,7 +50,7 @@ inline bool chmax(T& xmax, const U& x, Comp comp={}) {
 }
 
 template<typename T, typename U, typename Comp=less<>>
-inline bool chmin(T& xmin, const U& x, Comp comp={}) {
+inline bool chmin(T& xmin, const U& x, Comp comp={}) noexcept {
     if(comp(x, xmin)) {
         xmin = x;
         return true;
@@ -77,24 +77,24 @@ T from_str(const string& input) {
     return T::read_from(in);
 }
 
-inline u64 get_ticks_ms() {
+inline u64 get_ticks_ms() noexcept {
     static const auto START = chrono::high_resolution_clock::now();
     auto now = chrono::high_resolution_clock::now();
     return chrono::duration_cast<chrono::milliseconds>(now-START).count();
 }
 
 template<typename F>
-inline u64 bench(F&& f) {
+inline u64 bench(F&& f) noexcept {
     u64 t1 = get_ticks_ms();
     f();
     u64 t2 = get_ticks_ms();
     return t2 - t1;
 }
 
-inline pair<int,int> idx2yx(int i) {
+inline pair<int,int> idx2yx(int i) noexcept {
     return { i/8, i%8 };
 }
 
-inline int yx2idx(int y, int x) {
+inline int yx2idx(int y, int x) noexcept {
     return 8*y + x;
 }

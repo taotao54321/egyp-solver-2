@@ -37,17 +37,17 @@ public:
         free(bucket_);
     }
 
-    void clear() {
+    void clear() noexcept {
         memset(bucket_, 0, sizeof(TTEntry)*BUCKET_COUNT);
     }
 
     // 探索を打ち切ってよければ true を返す
     // そうでない場合、適当にテーブルを更新して false を返す
-    bool check(int depth, u64 area, const u64 (&bbs)[TL_COUNT]) {
+    bool check(int depth, u64 area, const u64 (&bbs)[TL_COUNT]) noexcept {
         u64 idx = hash_position(area, bbs) & (BUCKET_COUNT-1);
         auto& entry = bucket_[idx];
 
-        auto write_entry = [depth,area,&bbs,&entry] {
+        auto write_entry = [depth,area,&bbs,&entry]() noexcept {
 #ifdef CHECK_COLLISION
             entry.area = area;
             memcpy(entry.bbs, bbs, 8*TL_COUNT);
@@ -81,12 +81,14 @@ public:
         return true;
     }
 
-    size_t entry_count() const {
-        return count_if(bucket_, bucket_+BUCKET_COUNT, [](const auto& e) { return e.depth != 0; });
+    size_t entry_count() const noexcept {
+        return count_if(bucket_, bucket_+BUCKET_COUNT, [](const auto& e) noexcept {
+            return e.depth != 0;
+        });
     }
 
 private:
-    static u64 hash_position(u64 area, const u64(&bbs)[TL_COUNT]) {
+    static u64 hash_position(u64 area, const u64(&bbs)[TL_COUNT]) noexcept {
         u64 h = area;
         for(auto bb : bbs) {
             h = hash_combine(h,bb);
@@ -94,7 +96,7 @@ private:
         return h;
     }
 
-    static u64 hash_combine(u64 h, u64 x) {
+    static u64 hash_combine(u64 h, u64 x) noexcept {
         static constexpr u64 M = 0xc6a4a7935bd1e995;
         static constexpr int R = 47;
 

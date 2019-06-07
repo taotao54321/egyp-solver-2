@@ -24,7 +24,7 @@ public:
         solution_all_.reserve(1000);
     }
 
-    vector<vector<u64>> solve(const Position& pos) {
+    vector<vector<u64>> solve(const Position& pos) noexcept {
         tt_.clear();
         solution_.clear();
         solution_all_.clear();
@@ -36,7 +36,7 @@ public:
 
             cerr << "Depth " << depth_max_ << ": ";
 
-            u64 dur = bench([this,&pos]() { dfs(pos,0); });
+            u64 dur = bench([this,&pos]() noexcept { dfs(pos,0); });
             if(dur == 0) dur = 1;
             f64 nps = round(1000.0 * f64(node_count_) / f64(dur));
 
@@ -53,7 +53,7 @@ public:
     }
 
 private:
-    void dfs(const Position& pos, int depth) {
+    void dfs(const Position& pos, int depth) noexcept {
         ++node_count_;
         int lts = pos.least_to_solve();
         if(lts == 0) {

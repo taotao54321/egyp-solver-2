@@ -27,19 +27,19 @@ inline string bitboard_str(u64 bb) {
 }
 
 // bb != 0 を仮定
-inline int bitboard_bsf(u64 bb) {
+inline int bitboard_bsf(u64 bb) noexcept {
     return __builtin_ctzll(bb);
 }
 
 // 上下左右いずれかに隣接する1があれば1
-inline u64 bitboard_neighbor(u64 bb) {
+inline u64 bitboard_neighbor(u64 bb) noexcept {
     return ((bb&0x7F7F7F7F'7F7F7F7F)<<1) |
            ((bb&0xFEFEFEFE'FEFEFEFE)>>1) |
            (bb<<8) | (bb>>8);
 }
 
 // seed から到達できる領域を返す(境界含む)
-inline u64 bitboard_floodfill(u64 bb, u64 seed) {
+inline u64 bitboard_floodfill(u64 bb, u64 seed) noexcept {
     u64 cur = seed & (seed ^ bb);
     for(;;) {
         u64 tmp = cur | bitboard_neighbor(cur);
@@ -75,15 +75,15 @@ class Board {
 public:
     enum Result { SOLVED, STUCK, UNKNOWN };
 
-    explicit Board(const u64 (&bbs)[TL_COUNT]) {
+    explicit Board(const u64 (&bbs)[TL_COUNT]) noexcept {
         memcpy(bbs_, bbs, 8*TL_COUNT);
     }
 
-    const u64 (&bbs() const)[TL_COUNT] { return bbs_; }
+    const u64 (&bbs() const noexcept)[TL_COUNT] { return bbs_; }
 
-    u64 get(Tile tile) const { return bbs_[tile]; }
+    u64 get(Tile tile) const noexcept { return bbs_[tile]; }
 
-    Result result() const {
+    Result result() const noexcept {
         bool solved = true;
         FOR(i, TL_PC_FIRST, TL_PC_LAST) {
             int k = __builtin_popcountll(bbs_[i]);
@@ -94,7 +94,7 @@ public:
     }
 
     // (area,up,down,left,right)
-    tuple<u64,u64,u64,u64,u64> moves(u64 point) const {
+    tuple<u64,u64,u64,u64,u64> moves(u64 point) const noexcept {
         u64 ar = area(point);
         return {
             ar,
@@ -105,7 +105,7 @@ public:
         };
     }
 
-    void rotate_up(int x) {
+    void rotate_up(int x) noexcept {
         u64 mask = 0x01010101'01010101 << x;
         for(auto& bb : bbs_) {
             u64 tmp = __rorq(bb, 8);
@@ -115,7 +115,7 @@ public:
         erase_pcs();
     }
 
-    void rotate_down(int x) {
+    void rotate_down(int x) noexcept {
         u64 mask = 0x01010101'01010101 << x;
         for(auto& bb : bbs_) {
             u64 tmp = __rolq(bb, 8);
@@ -125,7 +125,7 @@ public:
         erase_pcs();
     }
 
-    void rotate_left(int y) {
+    void rotate_left(int y) noexcept {
         for(auto& bb : bbs_) {
             u64 tmp = __rorq(bb, 8*y);
             u64 b   = __rorb(u8(tmp), 1);
@@ -135,7 +135,7 @@ public:
         erase_pcs();
     }
 
-    void rotate_right(int y) {
+    void rotate_right(int y) noexcept {
         for(auto& bb : bbs_) {
             u64 tmp = __rorq(bb, 8*y);
             u64 b   = __rolb(u8(tmp), 1);
@@ -150,7 +150,7 @@ public:
     // 解がない(STUCK)局面に対しては 255 を返す
     // 盤面は正しいと仮定する(消えるはずのピースが消えていないとかはナシ)
     // ピース間の距離で判断(15パズルのマンハッタン距離枝刈りみたいな感じ)
-    int least_to_solve() const {
+    int least_to_solve() const noexcept {
         int res = 0;
 
         FOR(pc, TL_PC_FIRST, TL_PC_LAST) {
@@ -291,13 +291,13 @@ private:
     };
     static constexpr char SYM_EMPTY = '.';
 
-    u64 area(u64 point) const {
+    u64 area(u64 point) const noexcept {
         u64 boundary = bbs_[TL_U] | bbs_[TL_D] | bbs_[TL_L] | bbs_[TL_R] | bbs_[TL_WALL];
         u64 seed = bitboard_neighbor(point);
         return bitboard_floodfill(boundary, seed);
     }
 
-    void erase_pcs() {
+    void erase_pcs() noexcept {
         FOR(i, TL_PC_FIRST, TL_PC_LAST) {
             bbs_[i] &= ~bitboard_neighbor(bbs_[i]);
         }
