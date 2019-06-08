@@ -291,10 +291,16 @@ private:
     };
     static constexpr char SYM_EMPTY = '.';
 
+    // 始点 point からの到達可能領域を返す
     u64 area(u64 point) const noexcept {
         u64 boundary = bbs_[TL_U] | bbs_[TL_D] | bbs_[TL_L] | bbs_[TL_R] | bbs_[TL_WALL];
         u64 seed = bitboard_neighbor(point);
-        return bitboard_floodfill(boundary, seed);
+        u64 res = bitboard_floodfill(boundary, seed);
+        // このままでは res は境界として壁も含むため、本来同一局面のも
+        // のが始点によって異なる局面とみなされてしまう。そこで壁を除
+        // 外したbitboardを返す。
+        res &= ~bbs_[TL_WALL];
+        return res;
     }
 
     void erase_pcs() noexcept {

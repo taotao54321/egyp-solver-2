@@ -22,7 +22,7 @@ struct TTEntry {
 class TranspositionTable {
 public:
 #ifdef CHECK_COLLISION
-    static constexpr size_t BUCKET_COUNT = 1ULL << 23;
+    static constexpr size_t BUCKET_COUNT = 1ULL << 24;
 #else
     static constexpr size_t BUCKET_COUNT = 1ULL << 30;
 #endif
@@ -61,15 +61,13 @@ public:
             return false;
         }
 
-        // エントリの深さが depth 以上なら探索続行
-        // このときエントリの深さが depth より真に大きいなら現局面で上書き
-        if(depth <= entry.depth-1) {
-            if(depth < entry.depth-1)
-                write_entry();
+        // エントリの深さが depth より大きければ現局面で上書きし、探索続行
+        if(depth < entry.depth-1) {
+            write_entry();
             return false;
         }
 
-        // エントリの深さが depth より小さいため、探索を打ち切れる可能性がある
+        // エントリの深さが depth 以下のため、探索を打ち切れる可能性がある
 
 #ifdef CHECK_COLLISION
         // ハッシュ衝突した場合何もせず探索続行(深さの小さい局面を残す)

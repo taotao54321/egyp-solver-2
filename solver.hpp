@@ -25,12 +25,12 @@ public:
     }
 
     vector<vector<u64>> solve(const Position& pos) noexcept {
-        tt_.clear();
         solution_.clear();
         solution_all_.clear();
 
         for(depth_max_ = 0; ; ++depth_max_) {
             //if(depth_max_ > 10) break;  // for gprof
+            tt_.clear();  // 前のイテレーションの影響を排除
             node_count_ = 0;
             tt_hit_count_ = 0;
 
