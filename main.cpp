@@ -258,9 +258,11 @@ int main(int argc, char** argv) {
     if(argc == 2 && strcmp(argv[1],"-test") == 0)
         return test();
 
+    int depth_max_ini = argc == 2 ? atoi(argv[1]) : 0;
+
     auto pos = Position::read_from(cin);
 
-    Solver solver;
+    Solver solver(depth_max_ini);
     auto sols = solver.solve(pos);
 
     for(const auto& sol : sols) {

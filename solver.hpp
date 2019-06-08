@@ -19,7 +19,7 @@ inline string sol_str(const vector<u64>& sol) {
 
 class Solver {
 public:
-    Solver() {
+    explicit Solver(int depth_max_ini) : depth_max_ini_(depth_max_ini) {
         solution_.reserve(30);
         solution_all_.reserve(1000);
     }
@@ -28,7 +28,7 @@ public:
         solution_.clear();
         solution_all_.clear();
 
-        for(depth_max_ = 0; ; ++depth_max_) {
+        for(depth_max_ = depth_max_ini_; ; ++depth_max_) {
             //if(depth_max_ > 10) break;  // for gprof
             tt_.clear();  // 前のイテレーションの影響を排除
             node_count_ = 0;
@@ -123,6 +123,7 @@ private:
         }
     }
 
+    int depth_max_ini_;
     TranspositionTable tt_;
     int depth_max_;
     u64 node_count_;
